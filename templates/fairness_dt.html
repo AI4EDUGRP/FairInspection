@@ -1,0 +1,1074 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exploring AI Fairness in Education : Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/morris/morris-0.4.3.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-anwsome.css')}}">
+     <!-- Google Fonts-->
+   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+   
+   <script>
+       $(function(){
+           var sens_attr = "{% if sen_attr %}{{sen_attr}}{% else %}gender{% endif %}";
+           $("#sensitiveAttr").val(sens_attr).attr('selected','selected');
+
+           var metrics_attr ="{% if metric_attr %}{{metric_attr}}{% else %}Accuracy{% endif %}";
+           $('#perfMetrics').val(metrics_attr).attr('selected','selected');
+
+           var fair_metrics = "{% if metric_fair %}{{metric_fair}}{% else %}Consistency{% endif %}";
+           $('#fairMetric').val(fair_metrics).attr('selected','selected');
+
+           $('#lfr_div').hide();
+           $('#di_div').hide();
+           $('#preMitigation').change(function(e){
+               var changedAttr = this.value;
+               if (changedAttr == 'Reweighing'){
+                   $('#lfr_div').hide();
+                   $('#rw_div').show();
+                   $('#di_div').hide();
+               }
+               else if(changedAttr == 'Learning Fair Representations(LFR)'){
+                   $('#lfr_div').show();
+                   $('#rw_div').hide();
+                   $('#di_div').hide();
+               }
+               else{
+                   $('#lfr_div').hide();
+                   $('#rw_div').hide();
+                   $('#di_div').show(); 
+               }
+           });
+
+           $('#debias_div').hide();
+           $('#exp_grad_red_div').hide();
+           $('#inMitigation').change(function(e){
+               var changedAttr = this.value;
+               if (changedAttr == 'Prejudice Remover'){
+                   $('#pr_div').show();
+                   $('#debias_div').hide();
+                   $('#exp_grad_red_div').hide();
+               }
+               else if (changedAttr == 'Adversarial Debiasing'){
+                    $('#pr_div').hide();
+                    $('#debias_div').show();
+                    $('#exp_grad_red_div').hide();
+               }
+               else{
+                    $('#pr_div').hide();
+                    $('#debias_div').hide();
+                    $('#exp_grad_red_div').show();
+               }
+           });
+
+           $('#roc_div').hide();
+           $('#cpp_div').hide();
+           $('#postMitigation').change(function(e){
+               var changedAttr = this.value;
+               if (changedAttr == 'EqOddsPostprocessing'){
+                   $('#eqOdds_div').show();
+                   $('#roc_div').hide();
+                   $('#cpp_div').hide();
+               }
+               else if (changedAttr == 'CalibratedEqOddsPostprocessing'){
+                    $('#eqOdds_div').hide();
+                    $('#cpp_div').show();
+                    $('#roc_div').hide();
+               }
+               else{
+                    $('#eqOdds_div').hide();
+                    $('#cpp_div').hide();
+                    $('#roc_div').show();
+               }
+           });
+
+       });
+   </script>
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">FairInspection</a>
+            </div>
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Doe</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Today</em>
+                                    </span>
+                                </div>
+                                <div>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem Ipsum has been the industry's standard dummy text ever since an kwilnw...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem Ipsum has been the industry's standard dummy text ever since the...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 1</strong>
+                                        <span class="pull-right text-muted">60% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (success)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 2</strong>
+                                        <span class="pull-right text-muted">28% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100" style="width: 28%">
+                                            <span class="sr-only">28% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 3</strong>
+                                        <span class="pull-right text-muted">60% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (warning)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 4</strong>
+                                        <span class="pull-right text-muted">85% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%">
+                                            <span class="sr-only">85% Complete (danger)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Tasks</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-tasks -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <span class="pull-right text-muted small">4 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                    <span class="pull-right text-muted small">4 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
+                                    <span class="pull-right text-muted small">4 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </nav>
+        <!--/. NAV TOP  -->
+        
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+                    <li>
+                        <a href="/index.html"><i class="fa fa-dashboard"></i>Learning Behavior Analysis</a>
+                    </li>
+
+                    <li>
+                        <a href="#"> <i class="fa fa-dashboard"></i>Model Performance Evaluation</a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="model_lr.html">Logistic Regression</a>
+                            </li>
+                            <li>
+                                <a href="model_svm.html">Support Vector Machine</a>
+                            </li>
+                            <li>
+                                <a href="model_dt.html">Decision Tree</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="fa fa-dashboard"></i> Fairness Evaluation</a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="fairness_lr.html">Logistic Regression Fairness</a>
+                            </li>
+                            <li>
+                                <a href="fairness_svc.html">Support Vector Machine Fairness</a>
+                            </li>
+                            <li>
+                                <a href="fairness_dt.html">Decision Tree Fairness</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- /. NAV SIDE  -->
+
+
+        <div id="page-wrapper" >
+            <div id="page-inner">
+			    <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            Communicating <small>Trade-offs Between Model Performance and Fairness</small>
+                        </h1>
+                    </div>
+                </div> 
+                <!-- /. ROW  -->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">                 
+                            <div class="panel-heading">
+                                Assessment Results for model
+                            </div>
+                            <div class="panel-body">
+                                <form role='form'  method="post">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        Sensitive Features<br>
+                                                        <select name="sensitiveAttr" id ="sensitiveAttr" style="width:80%;height:30px" >
+                                                            <option>gender</option>
+                                                            <option>race</option>
+                                                            <option>hispanic_ethnicity</option>
+                                                        </select>
+                                                    </th>
+
+                                                    <th>
+                                                        Number of Instances
+                                                    </th>
+
+                                                    <th>
+                                                        Number of True Positives
+                                                    </th>
+
+                                                    <th style="align:center;">
+                                                        Performance Metrics<br>
+                                                        <select name="perfMetrics" id="perfMetrics" style="width:80%;height:30px">
+                                                            <option>Accuracy</option>
+                                                            <option>Recall</option>
+                                                            <option>Balanced Accuracy</option>
+                                                            <option>Precision</option>
+                                                            <option>F1-Score</option>
+                                                        </select>
+                                                    </th>
+
+                                                    <th>
+                                                        Fairness Metrics<br>
+                                                        <select name="fairMetric" id="fairMetric" style="width:80%;height:30px"}>
+                                                            <option>Consistency</option>
+                                                            <option>Theil Index</option>
+                                                            <option>Disparate Impact</option>
+                                                            <option>Average abs odds Difference</option>
+                                                            <option>Average odds Difference</option>
+                                                            <option>Equal Opportunity Difference</option>
+                                                            <option>Statistical Parity Difference</option>
+                                                            <option>Error Rate Difference</option>
+                                                            <option>Differential Fairness Bias Amplification</option>
+                                                            <option>False Omission Rate Difference</option>
+                                                            <option>False Discovery Rate Diffenence</option>
+                                                            <option>False Negative Rate Difference</option>
+                                                            <option>False Positive Rate Difference</option>
+                                                            <option>True Positive Rate Difference</option>
+                                                        </select>
+                                                    </th>
+
+                                                    <th>Selection Rate</th>
+                                                    <th>True Positive Rate</th>
+                                                    <th>True Negative Rate</th>
+                                                    <th>False Positive Rate</th>
+                                                    <th>False Negative Rate</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Overall</td>
+                                                    <td>{{num_instances}}</td>
+                                                    <td>{{num_positives}}</td>
+                                                    <td>{{class_metrics_score}}</td>
+                                                    <td>{{fairnesslvl}}</td>
+                                                    <td>{{selection_rate}}</td>
+                                                    <td>{{tpr}}</td>
+                                                    <td>{{tnr}}</td>
+                                                    <td>{{fpr}}</td>
+                                                    <td>{{fnr}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{sen_attr1}}</td>
+                                                    <td>{{num_priv_instances}}</td>
+                                                    <td>{{num_priv_positives}}</td>
+                                                    <td>{{metric_score1}}</td>
+                                                    <td></td>
+                                                    <td>{{selection_priv_rate}}</td>
+                                                    <td>{{tprpriv}}</td>
+                                                    <td>{{tnrpriv}}</td>
+                                                    <td>{{fprpriv}}</td>
+                                                    <td>{{fnrpriv}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{sen_attr2}}</td>
+                                                    <td>{{num_unpriv_instances}}</td>
+                                                    <td>{{num_unpriv_positives}}</td>
+                                                    <td>{{metric_score2}}</td>
+                                                    <td></td>
+                                                    <td>{{selection_unpriv_rate}}</td>
+                                                    <td>{{tprunpriv}}</td>
+                                                    <td>{{tnrunpriv}}</td>
+                                                    <td>{{fprunpriv}}</td>
+                                                    <td>{{fnrunpriv}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <input type='submit' value='Select'>
+                                </form>
+                            </div> 
+                        </div> 
+                    </div>
+                </div>
+                <!-- /. ROW  -->
+               
+                <div class="row">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">{{gaugeSPD}}</i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{gaugeEOD}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Equal Opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{gaugeAOD}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Average Odds Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{gaugeDI}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">
+                                    {{bal_acc_Scatter}}
+                                </i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Threshold vs Balanced Accuracy
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{eq_opp_diff_Scatter}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Threshold vs Equal opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{error_rate_diff_Scatter}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Threshold vs Error Rate Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{consistency_Scatter}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Threshold vs Consistency
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">       
+                            <div class="panel-body"> 
+                                <div class="alert alert-success">
+                                    <strong>Preprocessing Mitigation</strong>
+                                    <select name="Preprocess Mitigation" id="preMitigation" style="width:30%;height:30px">
+                                        <option>Reweighing</option>
+                                        <option>Learning Fair Representations(LFR)</option>
+                                        <option>Optimized Preprocessing (X)</option>
+                                        <option>Disparate Impact Remover</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>						
+                    </div>
+                </div>
+
+                <div class="row"  id="rw_div">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">{{gaugeSPD_dt}}</i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{gaugeEOD_dt}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Equal Opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{gaugeAOD_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Average Odds Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{gaugeDI_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"  id="lfr_div">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">{{gaugeSPD_lfr_dt}}</i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{gaugeEOD_lfr_dt}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Equal Opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{gaugeAOD_lfr_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Average Odds Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{gaugeDI_lfr_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row"  id="di_div">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">{{gaugeSPD_di_dt}}</i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{gaugeEOD_di_dt}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Equal Opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{gaugeAOD_di_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Average Odds Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{gaugeDI_di_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">       
+                            <div class="panel-body"> 
+                                <div class="alert alert-success">
+                                    <strong>Inprocessing Mitigation</strong>
+                                    <select name="Inprocessing Mitigation" id="inMitigation" style="width:30%;height:30px">
+                                        <option>Prejudice Remover</option>
+                                        <option>Adversarial Debiasing</option>
+                                        <option>Exponentiated Gradient Reduction</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>						
+                    </div>
+                </div>                
+
+                <div class="row" id="pr_div">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">
+                                    {{spd_Scatter}}
+                                </i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Regularization vs Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{pr_eq_opp_diff_Scatter}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Regularization vs Equal opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{pr_avg_odds_diff_Scatter}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Regularization vs Average Odds Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{pr_di_Scatter}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Regularization vs Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id = 'debias_div'>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">
+                                    {{gaugeSPD_debias}}
+                                </i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{gaugeEOD_debias}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Equal opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{gaugeAOD_debias}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Average Odds Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{gaugeDI_debias}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id = 'exp_grad_red_div'>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">
+                                    {{gaugeSPD_egr_dt}}
+                                </i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{gaugeEOD_egr_dt}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Equal opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{gaugeAOD_egr_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Average Odds Difference Scatter
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{gaugeDI_egr_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">       
+                            <div class="panel-body"> 
+                                <div class="alert alert-success">
+                                    <strong>Postprocessing Mitigation</strong>
+                                    <select name="Postprocessing Mitigation" id="postMitigation" style="width:30%;height:30px">
+                                        <option>EqOddsPostprocessing</option>
+                                        <option>CalibratedEqOddsPostprocessing</option>
+                                        <option>RejectOptionClassification</option>
+                                    </select>  
+                            </div>
+                        </div>						
+                    </div>
+                </div>   
+
+                <div class="row" id="eqOdds_div">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">{{gaugeSPD_eqOdds_dt}}</i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{gaugeEOD_eqOdds_dt}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Equal Opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{gaugeAOD_eqOdds_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Average Odds Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{gaugeDI_eqOdds_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id ='roc_div'>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">{{gaugeSPD_roc_dt}}</i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{gaugeEOD_roc_dt}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Equal Opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{gaugeAOD_roc_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Average Odds Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{gaugeDI_roc_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id ='cpp_div'>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-green">
+                            <div class="panel-body">
+                                <i class="fa fa-bar-chart-o fa-5x">{{gaugeSPD_cpp_dt}}</i>
+                            </div>
+                            <div class="panel-footer back-footer-green">
+                                Statistical Parity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-shopping-cart fa-5x"></i>
+                                {{gaugeEOD_cpp_dt}}
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+                                Equal Opportunity Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-red">
+                            <div class="panel-body">
+                                <i class="fa fa fa-comments fa-5x"></i>
+                                <h3>{{gaugeAOD_cpp_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-red">
+                                Average Odds Difference
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-brown">
+                            <div class="panel-body">
+                                <i class="fa fa-users fa-5x"></i>
+                                <h3>{{gaugeDI_cpp_dt}} </h3>
+                            </div>
+                            <div class="panel-footer back-footer-brown">
+                                Disparate Impact
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer><p>All right reserved. Implemented by: <a href="https://bopei.github.io/">Bo Pei</a></p></footer>
+			</div>
+             <!-- /. PAGE INNER  -->
+        </div>
+         <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+
+    <!-- jQuery Js -->
+    <script src="{{ url_for('static', filename='js/jquery-1.10.2.js') }}"></script>
+    
+    <!-- Bootstrap Js -->
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+   
+    <!-- Metis Menu Js -->
+    <script src="{{url_for('static',filename='js/jquery.metisMenu.js')}}"></script>
+    
+    <!-- Morris Chart Js -->
+    <script src="{{url_for('static',filename='js/morris/raphael-2.1.0.min.js')}}"></script>
+
+    <script src="{{url_for('static',filename='js/morris/morris.js')}}"></script>
+    <!-- Custom Js -->
+    <script src="{{url_for('static',filename='js/custom-scripts.js')}}"></script>
+</body>
+</html>

@@ -1,0 +1,570 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exploring AI Fairness in Education : Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/morris/morris-0.4.3.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-anwsome.css')}}">
+     <!-- Google Fonts-->
+   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">FairInspection</a>
+            </div>
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Doe</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Today</em>
+                                    </span>
+                                </div>
+                                <div>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem Ipsum has been the industry's standard dummy text ever since an kwilnw...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem Ipsum has been the industry's standard dummy text ever since the...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 1</strong>
+                                        <span class="pull-right text-muted">60% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (success)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 2</strong>
+                                        <span class="pull-right text-muted">28% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100" style="width: 28%">
+                                            <span class="sr-only">28% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 3</strong>
+                                        <span class="pull-right text-muted">60% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (warning)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 4</strong>
+                                        <span class="pull-right text-muted">85% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%">
+                                            <span class="sr-only">85% Complete (danger)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Tasks</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-tasks -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <span class="pull-right text-muted small">4 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                    <span class="pull-right text-muted small">4 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
+                                    <span class="pull-right text-muted small">4 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 min</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </nav>
+        <!--/. NAV TOP  -->
+
+
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+                    <li>
+                        <a href="index.html"><i class="fa fa-dashboard"></i> Learning Behavior Analysis</a>
+                    </li>
+					<li>
+                        <a href="#"><i class="fa fa-dashboard"></i> Model Performance Evaluation</a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="model_lr.html">Logistic Regression</a>
+                            </li>
+                            <li>
+                                <a href="model_svm.html">Support Vector Machine</a>
+                            </li>
+                            <li>
+                                <a href="model_dt.html">Decision Tree</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#"> <i class="fa fa-dashboard"></i>Fairness Evaluation</a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="fairness_lr.html">Logistic Regression Fairness</a>
+                            </li>
+                            <li>
+                                <a href="fairness_svc.html">Support Vector Machine Fairness</a>
+                            </li>
+                            <li>
+                                <a href="fairness_dt.html">Decision Tree Fairness</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+
+        
+        <div id="page-wrapper" >
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            Evaluating <small>Model Performance in Predicting Student Learning Performance</small>
+                        </h1>
+                    </div>
+                </div>
+                <!-- /. ROW  -->
+
+                <div class="row">
+                    {# leftside feature correlation #}
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        {# wrappperPanel #}
+                        <div class="panel panel-default">
+                        {# first chart #}
+                            <div class="panel-heading">
+                               Examining feature correlations
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    {{lineDiversity}}
+                                </div>
+                            </div>
+
+                            {# second chart #}
+                            <div class="panel-heading">
+                                
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    {{lineActiveness}}
+                                </div>
+                            </div>
+
+                            {# third chart #}
+                            <div class="panel-heading">
+                               
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    {{lineActDays}}
+                                </div>
+                            </div>
+
+                            {# fourth chart #}
+                            <div class="panel-heading">
+                                
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    {{lineCorrNums}}
+                                </div>
+                            </div>
+                            {# fourth chart end #}
+
+                            {# fifth chart #}
+                            <div class="panel-heading">
+                               
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    {{lineAvgTime}}
+                                </div>
+                            </div>
+                            {# fifth chart end #}
+                        </div>
+                        {# wrappperPanel end #}
+                    </div>
+
+                    {# rightside panel #}
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                        {# upper evaluation panel #}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Model Performance Evaluation Panel
+                            </div>
+                            {# performance metrics visualization #}
+                            <div class="panel-body">
+                                <div class="col-lg-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Bar Chart Evaluating Model Performance
+                                        </div>
+                                        <div class="panel-body">
+                                            {{barMetrics}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Confusion Matrix
+                                        </div>
+                                        <div class="panel-body">
+                                            {{confusionMatrix}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            ROC Curve
+                                        </div>
+                                        <div class="panel-body">
+                                            {{rocplot}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {# performance metrics visualization end #}
+                        </div>
+                        {# upper evaluation panel end #}
+
+                        {# middle mapping panel #}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Model Mapping Pannel
+                            </div>
+                            {# performance metrics visualization #}
+                            <div class="panel-body">
+                                <div class="col-lg-6">
+                                    <div class="panel-body">
+                                        <div>{{perfTrue}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" id = 'perfPred'>
+                               
+                                    <div class="panel-body">
+                                        <div>{{perfPred}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {# performance metrics visualization end #}
+                        </div>
+                        {# middle mapping panel end #}
+                        
+
+                        {# form begin #}
+                        <div class="panel panel-default">
+                            <div class=panel-heading>
+                                <form role='form' name= 'form-name' value='neighbor_form' method='post'>
+                                    <p>
+                                        Examine Similar Students: <input style='margin-left: 5px;'id ='studIdDiv' name='username' value ={{userId}} autocomplete = "off"/>
+                                        {# <p><div class="panel-body">Neighbors: <input name='neighbors' text='4'> #}
+                                        <input type='submit' name='ModelSelection' value='Select'>
+                                    </p>
+                                </form>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th>Useraccount ID</th>
+                                            <th>Gender</th>
+                                            <th>True Performance</th>
+                                            <th>True Labels</th>
+                                            <th>Predict Performance</th>
+                                            <th>Predict Labels</th>
+                                            <th>Flag</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="odd gradeX">
+                                            <td>{{ userId1 }}</td>
+                                            <td>{{ userGender1 }}</td>
+                                            <td>{{ userTruePerf1}}</td>
+                                            <td class="center">{{ userTrueLabel1 }}</td>
+                                            <td class="center">{{ userPredPerf1 }}</td>
+                                            <td class="center">{{ userPredLabel1 }}</td>
+                                            <td class="center">{{ userFlag1 }}</td>
+                                        </tr>
+                                        <tr class="even gradeC">
+                                            <td>{{ userId2 }}</td>
+                                            <td>{{ userGender2 }}</td>
+                                            <td>{{ userTruePerf2}}</td>
+                                            <td class="center">{{ userTrueLabel2 }}</td>
+                                            <td class="center">{{ userPredPerf2 }}</td>
+                                            <td class="center">{{ userPredLabel2 }}</td>
+                                            <td class="center">{{ userFlag2 }}</td>
+                                        </tr>
+                                        <tr class="odd gradeA">
+                                            <td>{{ userId3 }}</td>
+                                            <td>{{ userGender3 }}</td>
+                                            <td>{{ userTruePerf3}}</td>
+                                            <td class="center">{{ userTrueLabel3 }}</td>
+                                            <td class="center">{{ userPredPerf3 }}</td>
+                                            <td class="center">{{ userPredLabel3 }}</td>
+                                            <td class="center">{{ userFlag3 }}</td>
+                                        </tr>
+                                        <tr class="even gradeA">
+                                            <td>{{ userId4 }}</td>
+                                            <td>{{ userGender4 }}</td>
+                                            <td>{{ userTruePerf4}}</td>
+                                            <td class="center">{{ userTrueLabel4 }}</td>
+                                            <td class="center">{{ userPredPerf4 }}</td>
+                                            <td class="center">{{ userPredLabel4 }}</td>
+                                            <td class="center">{{ userFlag4 }}</td>
+                                        </tr>
+                                        <tr class="odd gradeA">
+                                            <td>{{ userId5 }}</td>
+                                            <td>{{ userGender5 }}</td>
+                                            <td>{{ userTruePerf5}}</td>
+                                            <td class="center">{{ userTrueLabel5}}</td>
+                                            <td class="center">{{ userPredPerf5 }}</td>
+                                            <td class="center">{{ userPredLabel5 }}</td>
+                                            <td class="center">{{ userFlag5 }}</td>
+                                        </tr>
+                                        <tr class="even gradeA">
+                                            <td>{{ userId6 }}</td>
+                                            <td>{{ userGender6 }}</td>
+                                            <td>{{ userTruePerf6}}</td>
+                                            <td class="center">{{ userTrueLabel6}}</td>
+                                            <td class="center">{{ userPredPerf6 }}</td>
+                                            <td class="center">{{ userPredLabel6 }}</td>
+                                            <td class="center">{{ userFlag6 }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {# form end #}
+
+
+                    </div>
+                    {# rightside panel end #}
+                </div>
+             
+                <!-- /. ROW  -->
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                LIME Interpretation
+                            </div>
+                            <div class="panel-body">
+                                {{exp|safe}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Shap Interpretation
+                            </div>
+                            {% for i in shap_plots: %}
+                                <iframe srcdoc="{{shap_plots[i]}}" width='100%' height='153'></iframe>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- /. ROW  -->
+                 <div class="row">
+				    <footer><p>All right reserved. Implemented by: <a href="https://bopei.github.io/">Bo Pei</a></p></footer>
+				</div>
+             <!-- /. PAGE INNER  -->
+
+
+
+            </div>
+         <!-- /. PAGE WRAPPER  -->
+        </div>
+
+    
+    <!-- jQuery Js -->
+    <script src="{{ url_for('static', filename='js/jquery-1.10.2.js') }}"></script>
+    
+    <!-- Bootstrap Js -->
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+   
+    <!-- Metis Menu Js -->
+    <script src="{{url_for('static',filename='js/jquery.metisMenu.js')}}"></script>
+    
+    <!-- Morris Chart Js -->
+    <script src="{{url_for('static',filename='js/morris/raphael-2.1.0.min.js')}}"></script>
+
+    <script src="{{url_for('static',filename='js/morris/morris.js')}}"></script>
+    <!-- Custom Js -->
+    <script src="{{url_for('static',filename='js/custom-scripts.js')}}"></script>
+</body>
+</html>

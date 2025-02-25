@@ -1,0 +1,5 @@
+gender,race,hispanic_ethnicity,metrics
+-0.017,-0.051,0.011,SPD
+0.06,-0.072,0.099,EOD
+0.026,-0.039,0.049,AOD
+0.877,0.721,1.059,DI
